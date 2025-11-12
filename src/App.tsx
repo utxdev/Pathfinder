@@ -17,7 +17,7 @@ function App() {
   const handleGenerate = async (topic: string, level: KnowledgeLevel, goal?: string) => {
     setView('loading');
     try {
-      const generatedRoadmap = await generateMockRoadmap(topic, level);
+      const generatedRoadmap = await generateMockRoadmap(topic, level, goal);
       if (generatedRoadmap) {
         setRoadmap(generatedRoadmap);
         setView('roadmap');

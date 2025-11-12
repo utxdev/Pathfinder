@@ -9,7 +9,8 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export async function generateMockRoadmap(
   topic: string,
-  level: string = 'Beginner'
+  level: string = 'Beginner', 
+  goal : string = 'as recomended by your own'
 ): Promise<Roadmap | null> {
   console.log(`Generating ${level} roadmap for ${topic}...`);
 
@@ -28,7 +29,7 @@ Your task is to create a comprehensive, detailed, and low-level learning roadmap
 - 'id' should be in the format 'roadmap_${Date.now()}'.
 - 'title' should be in the format '${topic} — ${level} Roadmap'.
 `;
-  const userQuery = `Generate a detailed, low-level roadmap for learning ${topic} at the ${level} level. Ensure all steps and resources are appropriate for this level.`;
+  const userQuery = `Generate a detailed, low-level roadmap for learning ${topic} at the ${level} level with a maximum time limit of ${goal}. Ensure all steps and resources are appropriate for this level.`;
   
   const payload = {
     contents: [{
