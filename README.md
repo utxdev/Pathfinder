@@ -98,15 +98,6 @@ npm run build
 
 ---
 
-## 📸 SCREENSHOTS
-
-```
-> ACCESS DENIED
-> Reason: The void doesn't render in screenshots
-> Suggestion: Deploy locally and see for yourself
-```
-
----
 
 ## 🤝 CONTRIBUTING
 
