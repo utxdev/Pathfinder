@@ -1,109 +1,145 @@
-# ⚡ PATHFINDER 2.0
+# ⚡ PATHFINDER
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ [SYSTEM ONLINE] Learning roadmap generator initialized │
+│ [STATUS] ACTIVE | [SECURITY] ENCRYPTED | [MODE] STEALTH │
+└─────────────────────────────────────────────────────────┘
+```
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-2.0-neon?style=for-the-badge)
-![Status](https://img.shields.io/badge/status-LIVE-success?style=for-the-badge)
-![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
+![Status](https://img.shields.io/badge/status-ONLINE-00ff00?style=for-the-badge&logo=statuspage&logoColor=white)
+![Security](https://img.shields.io/badge/security-ENCRYPTED-ff0000?style=for-the-badge&logo=hackaday&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-purple?style=for-the-badge)
 
-**The learning roadmap generator that doesn't suck.**
+**> The learning roadmap generator that doesn't suck.**
 
-[🚀 Live Demo](https://pathfinder-2mr4ylmwh-utkarshs-projects-afea6063.vercel.app) • [📖 Docs](#features) • [🎯 Roadmap](#roadmap)
+[🎯 DEPLOY](https://pathfinder-2mr4ylmwh-utkarshs-projects-afea6063.vercel.app) • [⚡ EXPLOIT](#features) • [🔓 ACCESS](#quick-start)
 
 </div>
 
 ---
 
-## 🎭 What is This?
+## 🕵️ WHAT IS THIS?
 
-Pathfinder 2.0 is a **TikTok-style learning experience** that turns boring roadmaps into an **immersive, gamified flow**. No more static lists. No more endless scrolling through roadmap.sh clones.
+A **TikTok-style learning experience** engineered for the terminal generation. No corporate BS. No bloated dashboards. No tracking pixels.
 
-Just **pure, focused learning**.
+Just **pure, focused learning** in the void.
 
-### ✨ The Experience
-
-```
-1. THE HOOK    →  Type your obsession
-2. THE FLOW    →  Swipe through fullscreen steps
-3. THE MASTER  →  Hold to charge, blast to the next level
-```
-
----
-
-## 🔥 Features
-
-- **🌑 Void Aesthetic** — Pure black background with neon accents
-- **📱 Swipe Navigation** — Vertical scroll-snap like TikTok/Reels
-- **🎮 Gamified Progress** — Hold to "master" each step
-- **⚡ Zero Friction** — No sign-up, no BS, just learn
-- **🎨 Brutalist Design** — Massive typography, minimal UI
-- **📲 Mobile-First** — Built for short attention spans
-
----
-
-## 🛠️ Tech Stack
+### 🎯 THE PROTOCOL
 
 ```bash
-React + TypeScript + Vite
-Tailwind CSS (Custom Void/Neon theme)
-Framer Motion (Smooth animations)
-Vercel (Deployment)
+[1] INITIATE    →  Enter your target skill
+[2] INFILTRATE  →  Swipe through encrypted knowledge blocks  
+[3] EXECUTE     →  Hold to decrypt, master the payload
 ```
 
 ---
 
-## 🚀 Quick Start
+## 🔥 FEATURES
+
+```
+┌─ CORE SYSTEMS ────────────────────────────────────────┐
+│                                                        │
+│  🌑 VOID MODE        Pure black + neon green accents  │
+│  📱 SWIPE PROTOCOL   Vertical scroll-snap navigation  │
+│  🎮 GAMIFIED XP      Hold-to-progress mechanics       │
+│  ⚡ ZERO TRACE       No sign-up, no cookies, no BS    │
+│  🎨 BRUTALIST UI     Massive glitch typography        │
+│  📲 MOBILE FIRST     Optimized for on-the-go hacking  │
+│                                                        │
+└────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🛠️ TECH STACK
 
 ```bash
-# Clone the repo
-git clone https://github.com/yourusername/pathfinder.git
+> FRAMEWORK........... React + TypeScript + Vite
+> STYLING............. Tailwind CSS (Void/Neon theme)
+> ANIMATIONS.......... Framer Motion (Smooth AF)
+> DEPLOYMENT.......... Vercel (Edge network)
+> SECURITY............ Client-side only, no backend
+```
+
+---
+
+## 🚀 QUICK START
+
+```bash
+# Clone the payload
+git clone https://github.com/utxdev/Pathfinder.git
 
 # Install dependencies
 npm install
 
-# Run locally
+# Launch local instance
 npm run dev
 
-# Build for production
+# Compile for production
 npm run build
 ```
 
 ---
 
-## 🎯 Roadmap
+## 🎯 DEVELOPMENT ROADMAP
 
-- [x] Core "Flow" experience
-- [x] Hold-to-progress mechanic
-- [x] Mobile swipe support
-- [ ] AI-powered roadmap generation
-- [ ] User accounts & saved paths
-- [ ] Community-shared roadmaps
-- [ ] Sound effects & haptics
-
----
-
-## 📸 Screenshots
-
-> *Coming soon — the void doesn't screenshot well.*
+```
+[✓] Core "Flow" experience
+[✓] Hold-to-progress mechanic
+[✓] Mobile swipe support
+[⧗] AI-powered roadmap generation
+[⧗] User accounts & encrypted storage
+[⧗] Community-shared exploit paths
+[⧗] Sound FX & haptic feedback
+```
 
 ---
 
-## 🤝 Contributing
+## 📸 SCREENSHOTS
 
-Pull requests are welcome. For major changes, open an issue first.
+```
+> ACCESS DENIED
+> Reason: The void doesn't render in screenshots
+> Suggestion: Deploy locally and see for yourself
+```
 
 ---
 
-## 📄 License
+## 🤝 CONTRIBUTING
 
+```bash
+# Found a vulnerability? 
+git checkout -b feature/your-exploit
+git commit -m "feat: add your payload"
+git push origin feature/your-exploit
+
+# Then open a PR. No corpo BS, just code.
+```
+
+---
+
+## 📄 LICENSE
+
+```
 MIT © 2025
+Permission granted to hack, modify, and distribute.
+No warranty. Use at your own risk.
+```
 
 ---
 
 <div align="center">
 
-**Built with ⚡ and caffeine**
+```
+┌──────────────────────────────────────────┐
+│  Built with ⚡ caffeine and late nights │
+│  [SYSTEM] Maintained by @utxdev          │
+└──────────────────────────────────────────┘
+```
 
-[⬆ Back to Top](#-pathfinder-20)
+**[⬆ RETURN TO TOP](#-pathfinder)**
 
 </div>
