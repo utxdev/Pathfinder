@@ -1,4 +1,4 @@
-# ⚡ PATHFINDER 2.0
+# ⚡ PATHFINDER
 
 <div align="center">
 
