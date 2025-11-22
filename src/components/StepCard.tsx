@@ -1,100 +1,124 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, Clock, Check } from 'lucide-react';
-import { Step } from '../types/roadmap';
-import ResourceItem from './ResourceItem';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, ChevronUp, Clock, Check, ExternalLink, BookOpen, PlayCircle, FileText } from 'lucide-react';
+import { Step, Resource } from '../types/roadmap';
+import GlassCard from './ui/GlassCard';
+import NeonButton from './ui/NeonButton';
 
 interface StepCardProps {
   step: Step;
   onToggleDone: (stepNumber: number) => void;
   onOpenResource: (url: string) => void;
+  index: number;
 }
 
-export default function StepCard({ step, onToggleDone, onOpenResource }: StepCardProps) {
+export default function StepCard({ step, onToggleDone, onOpenResource, index }: StepCardProps) {
   const [expanded, setExpanded] = useState(false);
 
-  const difficultyColors = {
-    Easy: 'bg-green-100 text-green-700',
-    Medium: 'bg-yellow-100 text-yellow-700',
-    Hard: 'bg-red-100 text-red-700',
+  const getResourceIcon = (type: Resource['type']) => {
+    switch (type) {
+      case 'video': return <PlayCircle className="w-4 h-4" />;
+      case 'article': return <FileText className="w-4 h-4" />;
+      case 'course': return <BookOpen className="w-4 h-4" />;
+      default: return <ExternalLink className="w-4 h-4" />;
+    }
   };
 
   return (
-    <div
-      className={`border rounded-xl p-6 transition-all ${
-        step.completed ? 'bg-green-50 border-green-200' : 'bg-white border-gray-200'
-      }`}
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.1 }}
     >
-      <div className="flex items-start gap-4">
-        <div
-          className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-            step.completed ? 'bg-green-600 text-white' : 'bg-cyan-100 text-cyan-700'
+      <GlassCard
+        className={`transition-all duration-300 ${step.completed ? 'border-green-500/30 bg-green-500/5' : 'hover:border-neon-cyan/30'
           }`}
-        >
-          {step.completed ? <Check className="w-5 h-5" aria-hidden="true" /> : step.step_number}
-        </div>
-
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-4 mb-2">
-            <h3 className="text-lg font-semibold text-gray-900">{step.title}</h3>
-            <button
-              onClick={() => onToggleDone(step.step_number)}
-              className={`flex-shrink-0 px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
-                step.completed
-                  ? 'bg-green-600 text-white hover:bg-green-700'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+      >
+        <div className="flex items-start gap-4">
+          <button
+            onClick={() => onToggleDone(step.step_number)}
+            className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg transition-all duration-300 ${step.completed
+                ? 'bg-green-500 text-black shadow-[0_0_15px_rgba(34,197,94,0.5)]'
+                : 'bg-white/10 text-white hover:bg-neon-cyan hover:text-black hover:shadow-[0_0_15px_rgba(0,243,255,0.5)]'
               }`}
-              aria-pressed={step.completed}
-            >
-              {step.completed ? 'Done' : 'Mark done'}
-            </button>
-          </div>
+          >
+            {step.completed ? <Check className="w-6 h-6" /> : step.step_number}
+          </button>
 
-          <p className="text-gray-600 mb-3">{step.description}</p>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between gap-4 mb-2">
+              <h3 className={`text-xl font-bold ${step.completed ? 'text-green-400' : 'text-white'}`}>
+                {step.title}
+              </h3>
+              <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${step.difficulty === 'Easy' ? 'bg-green-500/20 text-green-400' :
+                  step.difficulty === 'Medium' ? 'bg-yellow-500/20 text-yellow-400' :
+                    'bg-red-500/20 text-red-400'
+                }`}>
+                {step.difficulty}
+              </span>
+            </div>
 
-          <div className="flex flex-wrap items-center gap-3 text-sm">
-            <span className="inline-flex items-center gap-1 text-gray-600">
-              <Clock className="w-4 h-4" aria-hidden="true" />
-              {step.estimated_time_hours}h
-            </span>
-            <span className={`px-2 py-1 rounded text-xs font-medium ${difficultyColors[step.difficulty]}`}>
-              {step.difficulty}
-            </span>
-            {step.resources.length > 0 && (
-              <span className="text-gray-500">{step.resources.length} resources</span>
-            )}
-          </div>
+            <p className="text-gray-400 mb-4 leading-relaxed">{step.description}</p>
 
-          {step.resources.length > 0 && (
-            <div className="mt-4">
-              <button
-                onClick={() => setExpanded(!expanded)}
-                className="flex items-center gap-2 text-sm font-medium text-cyan-600 hover:text-cyan-700 transition-colors"
-                aria-expanded={expanded}
-              >
-                {expanded ? (
-                  <>
-                    Hide resources
-                    <ChevronUp className="w-4 h-4" aria-hidden="true" />
-                  </>
-                ) : (
-                  <>
-                    Show resources
-                    <ChevronDown className="w-4 h-4" aria-hidden="true" />
-                  </>
-                )}
-              </button>
-
-              {expanded && (
-                <div className="mt-3 space-y-2 border-t border-gray-200 pt-3">
-                  {step.resources.map((resource) => (
-                    <ResourceItem key={resource.id} resource={resource} onOpen={onOpenResource} />
-                  ))}
-                </div>
+            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-4">
+              <span className="flex items-center gap-1">
+                <Clock className="w-4 h-4 text-neon-purple" />
+                {step.estimated_time_hours}h
+              </span>
+              {step.resources.length > 0 && (
+                <span className="text-neon-cyan">{step.resources.length} resources</span>
               )}
             </div>
-          )}
+
+            {step.resources.length > 0 && (
+              <div className="mt-4">
+                <button
+                  onClick={() => setExpanded(!expanded)}
+                  className="flex items-center gap-2 text-sm font-bold text-neon-cyan hover:text-white transition-colors"
+                >
+                  {expanded ? (
+                    <>Hide Resources <ChevronUp className="w-4 h-4" /></>
+                  ) : (
+                    <>Show Resources <ChevronDown className="w-4 h-4" /></>
+                  )}
+                </button>
+
+                <AnimatePresence>
+                  {expanded && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="mt-3 space-y-2 pt-3 border-t border-white/10">
+                        {step.resources.map((resource) => (
+                          <div
+                            key={resource.id}
+                            onClick={() => onOpenResource(resource.url)}
+                            className="flex items-center gap-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 cursor-pointer transition-colors group"
+                          >
+                            <div className="p-2 rounded-md bg-black/20 text-neon-purple group-hover:text-white transition-colors">
+                              {getResourceIcon(resource.type)}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="text-sm font-medium text-gray-200 group-hover:text-neon-cyan truncate">
+                                {resource.title}
+                              </h4>
+                              <p className="text-xs text-gray-500 truncate">{resource.source}</p>
+                            </div>
+                            <ExternalLink className="w-4 h-4 text-gray-600 group-hover:text-white" />
+                          </div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    </div>
+      </GlassCard>
+    </motion.div>
   );
 }

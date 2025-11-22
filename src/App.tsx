@@ -1,74 +1,84 @@
-import { useEffect, useState } from 'react';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import HeroSection from './components/HeroSection';
-import RoadmapPage from './components/RoadmapPage';
-import LoaderModal from './components/LoaderModal';
-import { ToastProvider } from './components/ToastContainer';
-import { Roadmap, KnowledgeLevel } from './types/roadmap';
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import TheHook from './components/TheHook';
+import TheFlow from './components/TheFlow';
+import { Roadmap } from './types/roadmap';
 import { generateMockRoadmap } from './utils/mockData';
 
-type AppView = 'home' | 'loading' | 'roadmap';
+type AppState = 'hook' | 'generating' | 'flow';
 
 function App() {
-  const [view, setView] = useState<AppView>('home');
+  const [state, setState] = useState<AppState>('hook');
   const [roadmap, setRoadmap] = useState<Roadmap | null>(null);
 
-  const handleGenerate = async (topic: string, level: KnowledgeLevel, goal?: string) => {
-    setView('loading');
-    try {
-      const generatedRoadmap = await generateMockRoadmap(topic, level, goal);
-      if (generatedRoadmap) {
-        setRoadmap(generatedRoadmap);
-        setView('roadmap');
-      } else {
-        console.error("Failed to generate roadmap.");
-      }
-    } catch (error) {
-      console.error("An error occurred:", error);
-    } finally {
-      setView('roadmap');
-    }
-  };
-  
+  const handleGenerate = async (topic: string) => {
+    setState('generating');
+    // Simulate "Hacking" delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
-  const handleBack = () => {
-    setView('home');
+    const data = await generateMockRoadmap(topic, 'Beginner');
+    if (data) {
+      setRoadmap(data);
+      setState('flow');
+    } else {
+      setState('hook');
+    }
   };
 
   const handleUpdateStep = (stepNumber: number, completed: boolean) => {
     if (!roadmap) return;
-
-    const updatedRoadmap = {
+    setRoadmap({
       ...roadmap,
-      steps: roadmap.steps.map((step) =>
-        step.step_number === stepNumber ? { ...step, completed } : step
-      ),
-    };
-    setRoadmap(updatedRoadmap);
+      steps: roadmap.steps.map(s =>
+        s.step_number === stepNumber ? { ...s, completed } : s
+      )
+    });
   };
 
   return (
-    <ToastProvider>
-      <div className="min-h-screen flex flex-col bg-gray-50">
-        <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-cyan-600 focus:text-white focus:rounded">
-          Skip to content
-        </a>
+    <main className="bg-void min-h-screen text-white selection:bg-neon-primary selection:text-black">
+      <AnimatePresence mode='wait'>
+        {state === 'hook' && (
+          <motion.div
+            key="hook"
+            exit={{ opacity: 0, scale: 1.5, filter: 'blur(20px)' }}
+            transition={{ duration: 0.8 }}
+          >
+            <TheHook onGenerate={handleGenerate} />
+          </motion.div>
+        )}
 
-        <Header />
+        {state === 'generating' && (
+          <motion.div
+            key="generating"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 flex items-center justify-center bg-void z-50"
+          >
+            <div className="text-center">
+              <div className="text-6xl md:text-9xl font-bold text-neon-primary animate-pulse-fast">
+                HACKING...
+              </div>
+              <div className="mt-4 text-xl font-mono text-neon-accent">
+                BREACHING MAINFRAME
+              </div>
+            </div>
+          </motion.div>
+        )}
 
-        <main id="main" className="flex-1">
-          {view === 'home' && <HeroSection onGenerate={handleGenerate} />}
-          {view === 'roadmap' && roadmap && (
-            <RoadmapPage roadmap={roadmap} onBack={handleBack} onUpdateStep={handleUpdateStep} />
-          )}
-        </main>
-
-        {view === 'home' && <Footer />}
-
-        <LoaderModal open={view === 'loading'} />
-      </div>
-    </ToastProvider>
+        {state === 'flow' && roadmap && (
+          <motion.div
+            key="flow"
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <TheFlow roadmap={roadmap} onUpdateStep={handleUpdateStep} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </main>
   );
 }
 

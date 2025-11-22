@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { ArrowLeft, Share2, Download, Save, Clock, Tag } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowLeft, Share2, Download, Save, Clock, Tag, Sparkles } from 'lucide-react';
 import { Roadmap } from '../types/roadmap';
 import StepCard from './StepCard';
-import ProgressBar from './ProgressBar';
 import ShareModal from './ShareModal';
 import { useToast } from './ToastContainer';
+import NeonButton from './ui/NeonButton';
+import GlitchText from './ui/GlitchText';
 
 interface RoadmapPageProps {
   roadmap: Roadmap;
@@ -17,11 +19,15 @@ export default function RoadmapPage({ roadmap, onBack, onUpdateStep }: RoadmapPa
   const { showToast } = useToast();
 
   const completedSteps = roadmap.steps.filter((step) => step.completed).length;
+  const progress = (completedSteps / roadmap.steps.length) * 100;
 
   const handleToggleDone = (stepNumber: number) => {
     const step = roadmap.steps.find((s) => s.step_number === stepNumber);
     if (step) {
       onUpdateStep(stepNumber, !step.completed);
+      if (!step.completed) {
+        // Could trigger a confetti effect here
+      }
     }
   };
 
@@ -29,105 +35,114 @@ export default function RoadmapPage({ roadmap, onBack, onUpdateStep }: RoadmapPa
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
-  const handleShare = () => {
-    setShareModalOpen(true);
-  };
-
-  const handleSave = () => {
-    showToast('info', 'Please sign in to save your roadmap.');
-  };
-
-  const handleDownload = () => {
-    showToast('info', 'PDF download feature coming soon!');
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen pb-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <button
+
+        {/* Header Navigation */}
+        <motion.button
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
           onClick={onBack}
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mb-6"
+          className="inline-flex items-center gap-2 text-gray-400 hover:text-neon-cyan transition-colors mb-8 group"
         >
-          <ArrowLeft className="w-5 h-5" aria-hidden="true" />
-          Edit topic
-        </button>
+          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+          Back to Generator
+        </motion.button>
 
-        <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6">
-          <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6">
-            <div className="flex-1">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{roadmap.title}</h1>
-              <p className="text-gray-600 mb-3">{roadmap.summary}</p>
-
-              <div className="flex flex-wrap gap-3 text-sm">
-                <span className="inline-flex items-center gap-1 text-gray-700">
-                  <Clock className="w-4 h-4" aria-hidden="true" />
-                  {roadmap.estimated_total_time_hours}h total
-                </span>
-                <span className="px-3 py-1 bg-cyan-100 text-cyan-700 rounded-full font-medium">
-                  {roadmap.difficulty}
-                </span>
-                <div className="flex items-center gap-1">
-                  <Tag className="w-4 h-4 text-gray-500" aria-hidden="true" />
-                  {roadmap.tags.map((tag, index) => (
-                    <span key={index} className="text-gray-600">
-                      {tag}
-                      {index < roadmap.tags.length - 1 && ','}
-                    </span>
-                  ))}
-                </div>
-              </div>
+        {/* Roadmap Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-12"
+        >
+          <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-6">
+            <div>
+              <GlitchText text={roadmap.title} as="h1" className="text-4xl md:text-5xl mb-4" />
+              <p className="text-xl text-gray-400 max-w-2xl">{roadmap.summary}</p>
             </div>
 
-            <div className="flex flex-wrap gap-2">
-              <button
-                onClick={handleSave}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                aria-label="Save roadmap"
-              >
-                <Save className="w-4 h-4" aria-hidden="true" />
-                Save
-              </button>
-              <button
-                onClick={handleShare}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                aria-label="Share roadmap"
-              >
-                <Share2 className="w-4 h-4" aria-hidden="true" />
-                Share
-              </button>
-              <button
-                onClick={handleDownload}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                aria-label="Download as PDF"
-              >
-                <Download className="w-4 h-4" aria-hidden="true" />
-                PDF
-              </button>
+            <div className="flex gap-3">
+              <NeonButton variant="secondary" onClick={() => showToast('info', 'Sign in to save')} className="px-4">
+                <Save className="w-4 h-4" />
+              </NeonButton>
+              <NeonButton variant="secondary" onClick={() => setShareModalOpen(true)} className="px-4">
+                <Share2 className="w-4 h-4" />
+              </NeonButton>
             </div>
           </div>
 
-          <ProgressBar completedSteps={completedSteps} totalSteps={roadmap.steps.length} />
+          {/* Stats Bar */}
+          <div className="flex flex-wrap gap-4 text-sm text-gray-400 bg-white/5 p-4 rounded-xl border border-white/10 backdrop-blur-sm">
+            <span className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-neon-purple" />
+              {roadmap.estimated_total_time_hours}h Total Time
+            </span>
+            <span className="w-px h-4 bg-white/10" />
+            <span className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-neon-cyan" />
+              {roadmap.difficulty} Level
+            </span>
+            <span className="w-px h-4 bg-white/10" />
+            <div className="flex items-center gap-2">
+              <Tag className="w-4 h-4 text-neon-pink" />
+              {roadmap.tags.map((tag, i) => (
+                <span key={i} className="bg-white/10 px-2 py-0.5 rounded text-xs text-white">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Progress Bar */}
+        <div className="sticky top-4 z-40 mb-12">
+          <div className="bg-dark-card/80 backdrop-blur-xl border border-white/10 p-4 rounded-2xl shadow-2xl">
+            <div className="flex justify-between text-sm font-bold mb-2">
+              <span className="text-white">Progress</span>
+              <span className="text-neon-cyan">{Math.round(progress)}%</span>
+            </div>
+            <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-gradient-to-r from-neon-cyan to-neon-purple"
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 1, ease: "easeOut" }}
+              />
+            </div>
+          </div>
         </div>
 
-        <div className="space-y-4">
-          {roadmap.steps.map((step) => (
-            <StepCard
-              key={step.step_number}
-              step={step}
-              onToggleDone={handleToggleDone}
-              onOpenResource={handleOpenResource}
-            />
+        {/* Steps List */}
+        <div className="space-y-6 relative">
+          {/* Vertical Line */}
+          <div className="absolute left-[27px] top-8 bottom-8 w-0.5 bg-gradient-to-b from-neon-cyan via-neon-purple to-transparent opacity-30" />
+
+          {roadmap.steps.map((step, index) => (
+            <div key={step.step_number} className="relative pl-4">
+              <StepCard
+                step={step}
+                index={index}
+                onToggleDone={handleToggleDone}
+                onOpenResource={handleOpenResource}
+              />
+            </div>
           ))}
         </div>
 
-        {completedSteps === roadmap.steps.length && roadmap.steps.length > 0 && (
-          <div className="mt-8 p-6 bg-gradient-to-r from-green-50 to-cyan-50 rounded-2xl border border-green-200">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">🎉 Congratulations!</h3>
-            <p className="text-gray-700">
-              You've completed all steps in this roadmap. Keep up the great work on your learning
-              journey!
-            </p>
-          </div>
+        {/* Completion State */}
+        {completedSteps === roadmap.steps.length && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mt-12 p-8 text-center bg-gradient-to-b from-neon-cyan/10 to-transparent rounded-3xl border border-neon-cyan/30"
+          >
+            <h3 className="text-4xl font-bold text-white mb-4">Mission Accomplished! 🚀</h3>
+            <p className="text-gray-400 mb-8">You've mastered this roadmap. Ready for the next challenge?</p>
+            <NeonButton onClick={onBack} glowColor="purple">
+              Start New Journey
+            </NeonButton>
+          </motion.div>
         )}
       </div>
 

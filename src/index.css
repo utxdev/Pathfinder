@@ -2,35 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+  }
+
+  body {
+    @apply bg-void text-white font-sans antialiased overflow-hidden;
+  }
+}
+
 @layer utilities {
-  .animate-slide-in {
-    animation: slideIn 0.3s ease-out;
+  .snap-y-mandatory {
+    scroll-snap-type: y mandatory;
   }
 
-  .animate-progress {
-    animation: progress 2s ease-in-out infinite;
+  .snap-center {
+    scroll-snap-align: center;
   }
 
-  @keyframes slideIn {
-    from {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 
-  @keyframes progress {
-    0% {
-      width: 0%;
-    }
-    50% {
-      width: 70%;
-    }
-    100% {
-      width: 100%;
-    }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

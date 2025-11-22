@@ -1,70 +1,77 @@
 import { useEffect, useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Terminal } from 'lucide-react';
 
 interface LoaderModalProps {
   open: boolean;
-  onCancel?: () => void;
 }
 
-const tips = [
-  'Breaking learning into small steps helps your brain retain information better.',
-  'Studies show structured learning paths increase success rates by 60%.',
-  'The best time to learn is now — consistency beats perfection every time.',
+const loadingMessages = [
+  "Initializing neural link...",
+  "Scanning global knowledge base...",
+  "Optimizing learning vectors...",
+  "Synthesizing curriculum...",
+  "Decrypting success patterns...",
+  "Finalizing roadmap..."
 ];
 
-export default function LoaderModal({ open, onCancel }: LoaderModalProps) {
-  const [currentTip, setCurrentTip] = useState(0);
+export default function LoaderModal({ open }: LoaderModalProps) {
+  const [messageIndex, setMessageIndex] = useState(0);
 
   useEffect(() => {
-    if (!open) return;
-
-    const interval = setInterval(() => {
-      setCurrentTip((prev) => (prev + 1) % tips.length);
-    }, 3000);
-
-    return () => clearInterval(interval);
+    if (open) {
+      const interval = setInterval(() => {
+        setMessageIndex((prev) => (prev + 1) % loadingMessages.length);
+      }, 800);
+      return () => clearInterval(interval);
+    } else {
+      setMessageIndex(0);
+    }
   }, [open]);
 
   if (!open) return null;
 
   return (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="loader-title"
-    >
-      <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center space-y-6 shadow-2xl">
-        <div className="flex justify-center">
-          <Loader2 className="w-12 h-12 text-cyan-600 animate-spin" aria-hidden="true" />
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm"
+      >
+        <div className="w-full max-w-md p-8 font-mono">
+          <div className="flex items-center gap-2 text-neon-cyan mb-4">
+            <Terminal className="w-5 h-5" />
+            <span className="text-sm">SYSTEM_OVERRIDE_ACTIVE</span>
+          </div>
+
+          <div className="h-1 bg-gray-800 rounded-full overflow-hidden mb-4">
+            <motion.div
+              className="h-full bg-neon-cyan"
+              animate={{ width: ["0%", "100%"] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            />
+          </div>
+
+          <div className="space-y-2">
+            {loadingMessages.slice(0, messageIndex + 1).slice(-3).map((msg, i) => (
+              <motion.div
+                key={msg}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="text-green-500 text-sm"
+              >
+                {">"} {msg}
+              </motion.div>
+            ))}
+            <motion.span
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{ duration: 0.5, repeat: Infinity }}
+              className="inline-block w-2 h-4 bg-green-500 align-middle ml-1"
+            />
+          </div>
         </div>
-
-        <div>
-          <h2 id="loader-title" className="text-2xl font-bold text-gray-900 mb-2">
-            Generating your learning roadmap…
-          </h2>
-          <p className="text-gray-600" aria-live="polite">
-            {tips[currentTip]}
-          </p>
-        </div>
-
-        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-          <div className="bg-cyan-600 h-full rounded-full animate-progress"></div>
-        </div>
-
-        {onCancel && (
-          <button
-            onClick={onCancel}
-            className="text-gray-500 hover:text-gray-700 transition-colors text-sm font-medium"
-          >
-            Cancel
-          </button>
-        )}
-
-        <p className="sr-only" aria-live="assertive">
-          Roadmap generation in progress.
-        </p>
-      </div>
-    </div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
