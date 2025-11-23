@@ -15,7 +15,7 @@
 
 **> The learning roadmap generator that doesn't suck.**
 
-[🎯 DEPLOY](https://pathfinder-2mr4ylmwh-utkarshs-projects-afea6063.vercel.app) • [⚡ EXPLOIT](#features) • [🔓 ACCESS](#quick-start)
+[🎯 DEPLOY](https://pathfinder-ai-six.vercel.app/) • [⚡ EXPLOIT](#features) • [🔓 ACCESS](#quick-start)
 
 </div>
 
